@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <color name="ftv_background">#FF0F0F0F</color>
+
+    <style name="Theme.FamilyTv" parent="android:Theme.Material.NoActionBar">
+        <item name="android:windowBackground">@color/ftv_background</item>
+        <item name="android:colorBackground">@color/ftv_background</item>
+        <item name="android:statusBarColor">@color/ftv_background</item>
+        <item name="android:navigationBarColor">@color/ftv_background</item>
+        <item name="android:windowContentTransitions">false</item>
+    </style>
+
+    <style name="Theme.FamilyTv.Player">
+        <item name="android:windowBackground">@android:color/black</item>
+        <item name="android:windowFullscreen">true</item>
+    </style>
+</resources>

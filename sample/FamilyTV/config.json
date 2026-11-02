@@ -1,0 +1,44 @@
+{
+  "schemaVersion": 1,
+  "appName": "Family TV",
+  "defaultMode": "kids",
+  "settings": {
+    "autoplay": false,
+    "resumePlayback": true,
+    "sessionLimitMinutes": 30
+  },
+  "folders": [
+    {
+      "id": "kids-songs",
+      "name": "Các bài hát thiếu nhi",
+      "path": "videos/kids/songs",
+      "audience": "kids",
+      "recursive": true,
+      "sortBy": "filename"
+    },
+    {
+      "id": "kids-english",
+      "name": "Tiếng Anh cho bé",
+      "path": "videos/kids/english",
+      "audience": "kids",
+      "recursive": true,
+      "sortBy": "filename"
+    },
+    {
+      "id": "adults",
+      "name": "Video dành cho bố mẹ",
+      "path": "videos/adults",
+      "audience": "adults",
+      "recursive": true,
+      "sortBy": "filename"
+    },
+    {
+      "id": "family",
+      "name": "Cả nhà cùng xem",
+      "path": "videos/shared",
+      "audience": "all",
+      "recursive": true,
+      "sortBy": "filename"
+    }
+  ]
+}

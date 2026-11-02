@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Legacy (API < 26) launcher icon: white disc with the red play button. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="48dp"
+    android:height="48dp"
+    android:viewportWidth="108"
+    android:viewportHeight="108">
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M54,4A50,50 0,1 1,53.99,4Z" />
+    <path
+        android:fillColor="#FF2B2B"
+        android:pathData="M33,32H75A13,13 0 0 1 88,45V63A13,13 0 0 1 75,76H33A13,13 0 0 1 20,63V45A13,13 0 0 1 33,32Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M47,43L47,65L65.5,54Z" />
+</vector>

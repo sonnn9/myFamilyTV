@@ -1,0 +1,17 @@
+.gradle/
+.kotlin/
+build/
+app/build/
+local.properties
+.idea/
+*.iml
+captures/
+.externalNativeBuild/
+.cxx/
+
+# Personal media, build outputs and logs: never commit
+/videos/
+/videos_tv/
+/dist/
+*.log
+*.apk
