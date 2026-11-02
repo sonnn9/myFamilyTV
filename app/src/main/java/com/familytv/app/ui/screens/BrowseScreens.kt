@@ -1,7 +1,6 @@
 package com.familytv.app.ui.screens
 
 import androidx.compose.foundation.BorderStroke
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -71,6 +70,7 @@ import com.familytv.app.data.library.LibraryStatus
 import com.familytv.app.ui.Screen
 import com.familytv.app.ui.UiController
 import com.familytv.app.ui.components.AppIcons
+import com.familytv.app.ui.components.AppLogo
 import com.familytv.app.ui.components.Chip
 import com.familytv.app.ui.components.FtvButton
 import com.familytv.app.ui.components.MessagePanel
@@ -161,7 +161,7 @@ private fun HomeHeader(view: ModeView, status: LibraryStatus, ui: UiController) 
         horizontalArrangement = Arrangement.spacedBy(14.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically) {
-            Image(AppIcons.Logo, contentDescription = null, modifier = Modifier.size(width = 40.dp, height = 28.dp))
+            AppLogo(height = 28.dp)
             Spacer(Modifier.width(10.dp))
             Text(view.appName, color = Ftv.TextPrimary, fontSize = 26.sp, fontWeight = FontWeight.Bold)
         }

@@ -1,14 +1,12 @@
 <?xml version="1.0" encoding="utf-8"?>
-<!-- Red rounded play button (generic play icon), sized for the adaptive-icon safe zone. -->
+<!-- Orange house with a play button cut out (drawn in the opposite direction, so it stays a hole
+     on every API level), sized for the adaptive-icon safe zone. -->
 <vector xmlns:android="http://schemas.android.com/apk/res/android"
     android:width="108dp"
     android:height="108dp"
     android:viewportWidth="108"
     android:viewportHeight="108">
     <path
-        android:fillColor="#FF2B2B"
-        android:pathData="M36,35H72A11,11 0 0 1 83,46V62A11,11 0 0 1 72,73H36A11,11 0 0 1 25,62V46A11,11 0 0 1 36,35Z" />
-    <path
-        android:fillColor="#FFFFFF"
-        android:pathData="M48,44.5L48,63.5L64,54Z" />
+        android:fillColor="#F57C00"
+        android:pathData="M54,27L85,53H75V74A5,5 0 0 1 70,79H38A5,5 0 0 1 33,74V53H23Z M48.5,56L48.5,72L62,64Z" />
 </vector>

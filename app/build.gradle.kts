@@ -41,6 +41,13 @@ android {
     packaging {
         resources.excludes += setOf("/META-INF/{AL2.0,LGPL2.1}", "/META-INF/LICENSE*")
     }
+
+    // Personal branding kept out of git (README §10): resources in src/home/res override the public
+    // icon, logo and banner in your own builds. Build with -PnoHome to leave them out.
+    if (!providers.gradleProperty("noHome").isPresent) {
+        sourceSets.getByName("debug").res.srcDir("src/home/res")
+        sourceSets.getByName("release").res.srcDir("src/home/res")
+    }
 }
 
 kotlin {

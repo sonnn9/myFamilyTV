@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- In-app logo next to the app name: orange house with a white play button. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="30dp"
+    android:height="25dp"
+    android:viewportWidth="62"
+    android:viewportHeight="52">
+    <path
+        android:fillColor="#F57C00"
+        android:pathData="M31,0L62,26H52V47A5,5 0 0 1 47,52H15A5,5 0 0 1 10,47V26H0Z" />
+    <path
+        android:fillColor="#FFFFFF"
+        android:pathData="M25.5,29L25.5,45L39,37Z" />
+</vector>

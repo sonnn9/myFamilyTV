@@ -31,6 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.Dp
@@ -41,6 +42,7 @@ import androidx.tv.material3.ClickableSurfaceDefaults
 import androidx.tv.material3.Icon
 import androidx.tv.material3.Surface
 import androidx.tv.material3.Text
+import com.familytv.app.R
 import com.familytv.app.appContainer
 import com.familytv.app.core.model.ProgressRecord
 import com.familytv.app.core.model.Video
@@ -232,6 +234,17 @@ fun MoreCard(count: Int, onClick: () -> Unit, modifier: Modifier = Modifier) {
             Text("$count video", fontSize = 13.sp)
         }
     }
+}
+
+/** App logo at the given height, keeping the drawable's own proportions (a personal build may swap it). */
+@Composable
+fun AppLogo(height: Dp, modifier: Modifier = Modifier) {
+    val logo = painterResource(R.drawable.ic_logo)
+    Image(
+        logo,
+        contentDescription = null,
+        modifier = modifier.height(height).aspectRatio(logo.intrinsicSize.width / logo.intrinsicSize.height),
+    )
 }
 
 @Composable

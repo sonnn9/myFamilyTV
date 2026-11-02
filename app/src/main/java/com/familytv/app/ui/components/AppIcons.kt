@@ -76,15 +76,6 @@ object AppIcons {
             "-0.12,-0.61L19.14,12.94zM12,15.6c-1.98,0 -3.6,-1.62 -3.6,-3.6s1.62,-3.6 3.6,-3.6 3.6,1.62 3.6,3.6S13.98,15.6 12,15.6z",
     )
 
-    /** Red rounded play button (generic play icon). */
-    val Logo = ImageVector.Builder("Logo", 36.dp, 25.dp, 36f, 25f)
-        .addPath(
-            addPathNodes("M7,0H29A7,7 0 0 1 36,7V18A7,7 0 0 1 29,25H7A7,7 0 0 1 0,18V7A7,7 0 0 1 7,0Z"),
-            fill = SolidColor(Color(0xFFFF2B2B)),
-        )
-        .addPath(addPathNodes("M14.5,7L14.5,18L24,12.5Z"), fill = SolidColor(Color.White))
-        .build()
-
     private fun icon(name: String, path: String): ImageVector =
         ImageVector.Builder(name, 24.dp, 24.dp, 24f, 24f)
             .addPath(addPathNodes(path), fill = SolidColor(Color.Black))

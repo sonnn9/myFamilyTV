@@ -61,6 +61,7 @@ import com.familytv.app.core.model.ViewMode
 import com.familytv.app.data.library.LibraryStatus
 import com.familytv.app.data.library.SourceState
 import com.familytv.app.ui.components.AppIcons
+import com.familytv.app.ui.components.AppLogo
 import com.familytv.app.ui.components.FtvButton
 import com.familytv.app.ui.components.MessagePanel
 import com.familytv.app.ui.parent.ParentScreen
@@ -242,7 +243,7 @@ private fun SideMenu(selected: MenuDest, mode: ViewMode, appName: String, onSele
         verticalArrangement = Arrangement.spacedBy(6.dp),
     ) {
         Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(start = 6.dp, bottom = 18.dp)) {
-            Image(AppIcons.Logo, contentDescription = null, modifier = Modifier.size(width = 36.dp, height = 25.dp))
+            AppLogo(height = 25.dp)
             if (expanded) {
                 Spacer(Modifier.width(10.dp))
                 Column {

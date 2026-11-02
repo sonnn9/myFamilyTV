@@ -1,15 +1,24 @@
 # Family TV
 
-Ứng dụng Android TV cho gia đình: xem các video bố mẹ đã chép sẵn trên USB, giao diện kiểu "TV app" (menu trái, các hàng video, tìm kiếm, trình phát toàn màn hình), điều khiển hoàn toàn bằng remote, **chạy offline**.
+Ứng dụng Android TV cho gia đình: xem các video bố mẹ đã chép sẵn trên USB, giao diện quen thuộc của app xem video trên TV (menu trái, các hàng video, tìm kiếm, trình phát toàn màn hình), điều khiển hoàn toàn bằng remote, **chạy offline**.
 
-- Không cần Internet (APK **không có quyền INTERNET**), không tài khoản, không quảng cáo, không analytics, không YouTube API.
-- Chỉ hiển thị video trong các thư mục được khai báo trong `config.json`.
-- Chế độ **Trẻ em / Người lớn / Tất cả**. Mỗi lần mở app đều vào chế độ Trẻ em; đổi sang chế độ khác cần PIN.
-- Giới hạn thời gian xem theo ngày cho chế độ Trẻ em.
+> **English summary.** Family TV is an offline video player for Android TV (Android 6.0+). It plays only the folders a parent lists in `config.json` on a USB drive. It has no Internet permission, no ads and no analytics. The app always starts in Kids mode; switching to Adults/All or opening settings needs a PIN (salted PBKDF2, with lockout). Kids mode has a daily watch-time limit. Vietnamese search works with or without diacritics. Built with Kotlin, Compose for TV, Media3, Room and DataStore. The UI and docs are in Vietnamese. MIT licensed.
+
+**Tính năng chính**
+
+- Không cần Internet: APK **không có quyền INTERNET**, không tài khoản, không quảng cáo, không analytics.
+- Chỉ hiển thị video trong các thư mục được khai báo trong `config.json`. App không tự quét cả USB.
+- Ba chế độ **Trẻ em / Người lớn / Tất cả**. Mỗi lần mở app đều vào chế độ Trẻ em; đổi sang chế độ khác phải nhập PIN.
+- Giới hạn thời gian xem mỗi ngày cho chế độ Trẻ em.
 - App **chỉ đọc** USB, không ghi hay sửa gì trên USB.
-- Trải nghiệm giống app video quen thuộc: hàng "Đề xuất cho bạn", bấm Xuống khi đang xem để mở kệ "Video tiếp theo", màn kết thúc có gợi ý, đếm ngược "Tiếp theo". Logo là nút play đỏ; ở chế độ Trẻ em không có dấu hiệu nào cho thấy app đang lọc nội dung (xem mục 4.1).
+- Có hàng "Đề xuất cho bạn". Khi đang xem, bấm ▼ để mở kệ "Video tiếp theo". Hết video có gợi ý và đếm ngược "Tiếp theo".
+- Tìm kiếm tiếng Việt có dấu hoặc không dấu. Ảnh đại diện lấy từ ảnh cạnh video hoặc tự trích từ video.
 
-APK debug đã build sẵn: **`dist/FamilyTV-1.0.0-debug.apk`** (bản gốc nằm ở `app/build/outputs/apk/debug/app-debug.apk`).
+**Tải và cài:** tải file APK ở mục [Releases](https://github.com/sonnn9/myFamilyTV/releases) (nếu chưa có bản phát hành, tự build theo mục 10), rồi cài theo mục 2.
+
+**Thiết bị:** TV hoặc box chạy **Android TV / Google TV từ Android 6.0** trở lên (Sony, TCL, Xiaomi, Philips, Mi Box, Chromecast with Google TV…). App không chạy trên Samsung (Tizen), LG (webOS) hay Apple TV.
+
+**Lưu ý:** Family TV không liên quan tới YouTube hay Google. App không tải video từ Internet; bạn tự chuẩn bị video và chịu trách nhiệm về quyền sử dụng nội dung.
 
 ---
 
@@ -80,26 +89,26 @@ Khi bản cập nhật `config.json` bị lỗi, app **giữ bản hợp lệ g�
 
 **Quy tắc an toàn:** một file có thể nằm trong nhiều mục cấu hình, ví dụ mục `kids` khai báo `videos` (đệ quy) và mục `adults` khai báo `videos/adults`. Nếu **bất kỳ** mục nào chứa file đó có `audience: "adults"`, file sẽ **không bao giờ** xuất hiện ở chế độ Trẻ em, dù ở hàng kids, tìm kiếm, yêu thích, xem tiếp, lịch sử, hàng đợi phát hay khi mở theo ID. App cũng nhận ra hai đường dẫn chỉ khác hoa/thường là cùng một thư mục, và hiện cảnh báo giải thích khi phát hiện phạm vi chồng lấn.
 
-### 1.4 Ảnh đại diện (thumbnail)
+### 1.4 Ảnh đại diện và ảnh nền
 
 - Đặt ảnh **cùng tên** với video, cạnh video: `Bai hat ABC.mp4` → `Bai hat ABC.jpg`. Các đuôi được nhận: `.jpg`, `.jpeg`, `.png`, `.webp`.
 - Nếu không có ảnh, app tự trích một khung hình (khoảng 10% thời lượng) **trong nền**, tối đa 2 video cùng lúc.
 - Ảnh được thu nhỏ còn 480×270 và lưu trong bộ nhớ đệm riêng của app. Bộ nhớ đệm tối đa khoảng 120 MB, tự dọn ảnh cũ; nếu TV còn dưới 50 MB trống thì app chỉ giữ ảnh trong RAM. Không có gì được ghi lên USB.
 - Nếu không tạo được ảnh, app hiển thị ô màu kèm biểu tượng ▶.
 
-**Ảnh nền của app:** đặt file `background.jpg` (hoặc `background.jpeg`/`.png`/`.webp`) ngay trong thư mục `FamilyTV`. App hiển thị ảnh này phía sau Trang chủ và các trang khác, làm tối dần xuống dưới để chữ vẫn dễ đọc. Ảnh được thu nhỏ về tối đa 1920 px và lưu một bản trong bộ nhớ đệm của app. Muốn đổi ảnh thì thay file rồi rút/cắm lại USB (hoặc "Quét lại thư viện"); muốn bỏ thì xóa file. Đây là nền **bên trong app**: màn hình chính của Android TV (launcher Sony/Google) không cho đặt ảnh nền riêng.
+**Ảnh nền của app:** đặt file `background.jpg` (hoặc `background.jpeg`/`.png`/`.webp`) ngay trong thư mục `FamilyTV`. App hiển thị ảnh này phía sau Trang chủ và các trang khác, làm tối dần xuống dưới để chữ vẫn dễ đọc. Ảnh được thu nhỏ về tối đa 1920 px và lưu một bản trong bộ nhớ đệm của app. Muốn đổi ảnh thì thay file rồi rút/cắm lại USB (hoặc "Quét lại thư viện"); muốn bỏ thì xóa file. Đây là nền **bên trong app**, không phải ảnh nền màn hình chính của TV.
 
 ### 1.5 Định dạng video
 
-Khả năng phát **phụ thuộc codec và phần cứng của TV**, app không đảm bảo phát được mọi file. Khuyên dùng **MP4 (H.264 + AAC)**. MKV/WebM/MOV/TS thường phát được nếu codec bên trong được TV hỗ trợ. WMV không được hỗ trợ. File lỗi hoặc không hỗ trợ sẽ hiện thông báo dễ hiểu, app không bị crash.
+Khả năng phát **phụ thuộc codec và phần cứng của TV**, app không đảm bảo phát được mọi file. Khuyên dùng **MP4 (H.264 + AAC, tối đa 1080p)**: gần như TV nào cũng phát được. MKV/WebM/MOV/TS thường phát được nếu codec bên trong được TV hỗ trợ. WMV không được hỗ trợ. File lỗi hoặc không hỗ trợ sẽ hiện thông báo dễ hiểu, app không bị crash.
 
-TV Sony đang dùng (BRAVIA VU1, Android 11) giải mã được hình H.264, H.265, VP8, VP9, MPEG-2/4, nhưng **không giải mã được AV1**. Video tải từ Internet rất hay dùng AV1, kể cả khi đuôi file là `.mp4`. Gặp file như vậy, app báo "TV này không có bộ giải mã hình cho định dạng AV1". Trước khi có bản sửa này, TV chỉ phát tiếng mà không có hình. Cách xử lý: xem mục 1.6.
+**Cẩn thận với AV1.** Video tải từ Internet rất hay dùng AV1 (kể cả khi đuôi file là `.mp4` hay `.webm`), trong khi nhiều TV không có bộ giải mã AV1. Ví dụ một TV Sony BRAVIA đời 2020 (Android 11) giải mã được H.264, H.265, VP8, VP9, MPEG-2/4 nhưng không giải mã được AV1. Khi gặp file như vậy, app báo rõ "TV này không có bộ giải mã hình cho định dạng AV1" thay vì chỉ phát tiếng mà không có hình. Cách xử lý: chuyển đổi theo mục 1.6, hoặc ngay từ lúc tải/xuất video, chọn định dạng H.264 + AAC tối đa 1080p.
 
 Các file sau bị bỏ qua: file/thư mục bắt đầu bằng `.` (kể cả file `._xxx` do macOS tạo), `$RECYCLE.BIN`, `System Volume Information`. Mỗi lần quét tối đa 20.000 video và thư mục sâu tối đa 12 cấp.
 
 ### 1.6 Chuyển đổi video và âm thanh cho TV
 
-Cần cài **ffmpeg** (gồm cả `ffprobe`), ví dụ: `winget install Gyan.FFmpeg`.
+Cần cài **ffmpeg** (gồm cả `ffprobe`), ví dụ trên Windows: `winget install Gyan.FFmpeg`.
 
 **Kiểm tra codec của một file:**
 
@@ -109,7 +118,7 @@ ffprobe -v error -show_entries stream=codec_type,codec_name,width,height -of com
 
 TV phát tốt khi hình là `h264` (tối đa 1920×1080) và tiếng là `aac` hoặc `mp3`. Nếu thấy hình là `av1`, cần chuyển đổi.
 
-**Chuyển cả thư mục FamilyTV (khuyên dùng):**
+**Chuyển cả thư mục FamilyTV (Windows, khuyên dùng):**
 
 ```
 powershell -ExecutionPolicy Bypass -File tools\convert_for_tv.ps1 -Source E:\FamilyTV -Output D:\FamilyTV_tv
@@ -122,12 +131,12 @@ Script không sửa thư mục gốc. Nó tạo thư mục `-Output` có cùng c
 - File kết quả luôn là `.mp4` (bật `faststart` để mở nhanh).
 - `config.json`, ảnh đại diện `.jpg/.png` và các file khác được chép sang; file `._xxx` của macOS bị bỏ qua.
 - **Dừng giữa chừng rồi chạy lại được:** lần chạy sau bỏ qua file đã xong và chỉ xử lý file mới hoặc file đã thay đổi. File đang mã hóa được ghi vào `xxx.mp4.part` rồi mới đổi tên, nên không bao giờ có file `.mp4` dở dang.
-- **File đang tải về** (file tạm của yt-dlp như `.part`, `.ytdl`, `.temp.webm`, `.f123.webm`, hoặc file vừa thay đổi trong 2 phút gần nhất) được để lại. Tải xong thì chạy lại lệnh trên.
-- Script chạy ở mức ưu tiên thấp nên máy vẫn dùng bình thường được. Script dùng CPU (x264): trên máy Core i7-8700, video 4K AV1 chuyển được khoảng gấp 2 lần thời gian thực (1 giờ video mất khoảng 30 phút). Card NVIDIA không được dùng vì ffmpeg 8.x cần driver 570 trở lên.
+- **File đang tải về** (file tạm như `.part`, `.ytdl`, `.temp.webm`, `.f123.webm`, hoặc file vừa thay đổi trong 2 phút gần nhất) được để lại. Tải xong thì chạy lại lệnh trên.
+- Script chạy ở mức ưu tiên thấp nên máy vẫn dùng bình thường được, và mã hóa bằng CPU (x264). Ví dụ trên Core i7-8700, video 4K AV1 chuyển được khoảng gấp 2 lần thời gian thực (1 giờ video mất khoảng 30 phút). Máy có thể tự khởi động lại (ví dụ do Windows Update) khi chạy qua đêm; khi đó chỉ cần chạy lại lệnh.
 
-Chạy xong, chép thư mục `-Output` lên USB thay cho thư mục FamilyTV cũ.
+Chạy xong, chép thư mục `-Output` lên USB thay cho thư mục FamilyTV cũ. Giữ nguyên tên file thì tiến độ xem và yêu thích vẫn còn.
 
-**Chuyển một file bằng ffmpeg:**
+**Chuyển một file bằng ffmpeg (mọi hệ điều hành):**
 
 ```
 ffmpeg -i "vao.mp4" -map 0:v:0 -map 0:a:0? -c:v libx264 -preset medium -crf 21 -profile:v high -level:v 4.1 -pix_fmt yuv420p -vf "scale='min(1920,iw)':-2" -c:a aac -b:a 160k -movflags +faststart "ra.mp4"
@@ -135,31 +144,29 @@ ffmpeg -i "vao.mp4" -map 0:v:0 -map 0:a:0? -c:v libx264 -preset medium -crf 21 -
 
 Nếu tiếng gốc đã là AAC, có thể thay `-c:a aac -b:a 160k` bằng `-c:a copy` để giữ nguyên âm thanh và chạy nhanh hơn.
 
-**Đã làm với USB hiện tại (28/10/2026):** 2 video trong `videos/kids/songs` và `videos/kids/english` là AV1 1080p, tiếng AAC. Tôi đã chuyển hình sang H.264 1080p, **giữ nguyên tiếng AAC**, đặt lại đúng chỗ với cùng tên file (nên tiến độ xem và yêu thích vẫn giữ). Hai file AV1 gốc được chuyển sang `FamilyTV/_goc_AV1/`; app không hiển thị thư mục này, có thể xóa khi không cần nữa.
-
 ---
 
-## 2. Cài lên Android TV (Sony KD-49X7500H)
+## 2. Cài lên Android TV
 
-**Kiểm tra phiên bản Android trước:** Cài đặt → Tùy chọn thiết bị → Giới thiệu → Phiên bản. App hỗ trợ Android 6.0 trở lên. TV đang dùng thực tế báo `BRAVIA VU1`, **Android 11**.
+**Kiểm tra phiên bản Android trước:** Cài đặt → Tùy chọn thiết bị → Giới thiệu → Phiên bản. App hỗ trợ Android 6.0 trở lên.
 
 **Cách A – qua adb (khuyên dùng):**
 1. Trên TV: Cài đặt → Tùy chọn thiết bị → Giới thiệu → bấm 7 lần vào "Bản dựng" để bật Tùy chọn nhà phát triển. Sau đó vào Tùy chọn nhà phát triển, bật "Gỡ lỗi USB" / "Gỡ lỗi qua mạng" nếu có.
 2. Trên máy tính cùng mạng: `adb connect <IP-của-TV>:5555`, chấp nhận hộp thoại trên TV.
-3. `adb install -r dist/FamilyTV-1.0.0-debug.apk`
+3. `adb install -r FamilyTV-1.0.0-debug.apk`
 
-**Cách B – qua USB và ứng dụng quản lý tệp:** chép APK vào USB, mở bằng một ứng dụng quản lý tệp trên TV, và cho phép "Nguồn không xác định" cho ứng dụng đó (Cài đặt → Tùy chọn thiết bị → Bảo mật & giới hạn).
+**Cách B – qua USB và ứng dụng quản lý tệp:** chép APK vào USB, mở bằng một ứng dụng quản lý tệp trên TV, và cho phép "Nguồn không xác định" cho ứng dụng đó (thường ở Cài đặt → Tùy chọn thiết bị → Bảo mật & giới hạn).
 
-Biểu tượng Family TV sẽ xuất hiện trong hàng ứng dụng của launcher Android TV.
+Biểu tượng Family TV sẽ xuất hiện trong danh sách ứng dụng của launcher Android TV. Tùy launcher, bạn có thể đưa nó lên hàng ứng dụng ở màn hình chính.
 
 ## 3. Lần đầu mở app
 
 1. **Tạo PIN bố mẹ** (4–8 chữ số; app từ chối PIN quá dễ như `0000` hay `1234`). Không có PIN mặc định.
 2. **Chọn thư mục FamilyTV** trong Khu vực bố mẹ. Trên menu trái, mục này hiện tên **"Cài đặt"** (biểu tượng bánh răng) và luôn cần PIN:
    - **"Chọn thư mục FamilyTV"** dùng trình chọn thư mục của hệ thống (Storage Access Framework). Mở USB, chọn thư mục `FamilyTV`, bấm "Cho phép". App lưu quyền truy cập lâu dài nếu TV hỗ trợ.
-   - Nếu TV **không có trình chọn thư mục**, app sẽ báo rõ. Tình huống này đã xảy ra thật trên emulator Android TV 9 (xem mục 8). Khi đó dùng **"Đọc USB trực tiếp (dự phòng)"**:
+   - Nhiều TV **không có trình chọn thư mục** (đã gặp trên emulator Android TV 9 và trên một TV Sony Android 11, xem mục 8); app sẽ báo rõ. Khi đó dùng **"Đọc USB trực tiếp (dự phòng)"**:
      - **Android 6–10:** bấm "Cấp quyền đọc bộ nhớ" → Cho phép. App liệt kê các ổ, rồi chọn `<USB> / FamilyTV`.
-     - **Android 11 trở lên:** cần quyền "Truy cập mọi tệp". Nhiều TV không có màn hình cấp quyền này; khi đó chạy lệnh sau từ máy tính:
+     - **Android 11 trở lên:** cần quyền "Truy cập mọi tệp". Nhiều TV không có màn hình cấp quyền này; khi đó chạy lệnh sau từ máy tính (một lần):
        `adb shell appops set --uid com.familytv.app MANAGE_EXTERNAL_STORAGE allow`
 3. App quét thư viện (chạy nền) và hiện Trang chủ ở chế độ Trẻ em.
 
@@ -182,13 +189,13 @@ Cách các lựa chọn phát tiếp hoạt động khi hết video:
 - Với "Lặp danh sách" và "Tự phát tiếp", trước khi chuyển video sẽ có thẻ **"Tiếp theo sau 5 giây"** kèm nút Phát ngay / Hủy. Bấm Hủy hoặc Back thì ở lại màn kết thúc.
 - Không bật lựa chọn nào: hiện "Đã xem xong" với các nút Xem lại / Video tiếp theo / Quay lại, bên dưới là kệ gợi ý.
 
-### 4.1 Giống app video quen thuộc
+### 4.1 Trải nghiệm quen thuộc
 
-- **Trang chủ:** đầu trang có logo nút play đỏ và tên app (lấy từ `appName` trong `config.json`). Hàng đầu tiên là **"Đề xuất cho bạn"**, gồm video lấy xen kẽ từ các danh mục, video chưa xem xong xếp trước. Hàng này chỉ hiện khi có ít nhất 2 danh mục có video.
+- **Trang chủ:** đầu trang có logo và tên app (lấy từ `appName` trong `config.json`). Hàng đầu tiên là **"Đề xuất cho bạn"**, gồm video lấy xen kẽ từ các danh mục, video chưa xem xong xếp trước. Hàng này chỉ hiện khi có ít nhất 2 danh mục có video.
 - **Đang xem, bấm ▼:** kệ **"Video tiếp theo"** trượt lên. Thứ tự gợi ý: các video kế tiếp trong danh sách đang xem, rồi video cùng thư mục, rồi các video đề xuất khác. Chọn một thẻ để phát ngay; ▲ quay về các nút điều khiển. Khi thanh điều khiển đang hiện, dòng chữ "Video tiếp theo" ló ra ở mép dưới; bấm ▼ từ hàng nút cũng mở kệ.
 - **Hết video:** màn kết thúc có kệ gợi ý; nếu bật tự phát hoặc lặp danh sách thì có đếm ngược "Tiếp theo".
-- **Ở chế độ Trẻ em, app không hiện** nút "Chế độ", số phút còn lại, cảnh báo config hay chữ "chế độ Trẻ em" ở Tìm kiếm/Danh mục. Mục Khu vực bố mẹ trên menu mang tên **"Cài đặt"** với biểu tượng bánh răng, và hỏi "Nhập mã PIN". Các thông tin này vẫn hiện ở chế độ Người lớn/Tất cả và trong Cài đặt.
-- **Logo:** icon launcher, banner Android TV và logo trong app là **nút play đỏ bo góc** (biểu tượng play chung, tự vẽ, không dùng logo hay tên thương hiệu của hãng khác). Tên hiện dưới icon trên launcher vẫn là "Family TV"; muốn đổi thì sửa `app_name` trong `app/src/main/res/values/strings.xml` rồi build lại. Tên trong app đổi bằng `appName` trong `config.json`.
+- **Giao diện chế độ Trẻ em gọn gàng:** không hiện nút "Chế độ", số phút còn lại, cảnh báo config hay chữ "chế độ Trẻ em" ở Tìm kiếm/Danh mục. Khu vực bố mẹ trên menu mang tên **"Cài đặt"** với biểu tượng bánh răng, và hỏi "Nhập mã PIN". Các thông tin này vẫn hiện ở chế độ Người lớn/Tất cả và trong Cài đặt.
+- **Tên và biểu tượng:** tên trong app đổi bằng `appName` trong `config.json`. Tên dưới biểu tượng trên launcher là `app_name` trong `app/src/main/res/values/strings.xml`. Muốn dùng biểu tượng/logo riêng cho bản build của mình, xem mục 10.
 - **An toàn:** mọi gợi ý, đề xuất và đếm ngược đều lấy từ dữ liệu đã lọc theo chế độ. Ở chế độ Trẻ em không có đường nào để hiện video `adults` (có unit test cho `recommended` và `related`). Giới hạn giờ xem vẫn áp dụng khi phát từ gợi ý.
 
 ## 5. Chế độ xem và PIN
@@ -234,7 +241,7 @@ Cách các lựa chọn phát tiếp hoạt động khi hết video:
 - `WatchTimeTest` (6): lưu và phục hồi thời gian, hết giờ sau khởi động lại, thêm giờ, qua ngày mới, đồng hồ chỉnh lùi, nhịp âm/quá lớn.
 - `PinTest` (7): PBKDF2 khớp với cài đặt chuẩn của JVM, PIN yếu, khóa tăng dần, khóa vẫn còn sau khởi động lại, không có PIN mặc định, đổi PIN, cần PIN còn hiệu lực để rời chế độ Trẻ em.
 
-**Build:** `assembleDebug` thành công; Android Lint 0 lỗi (còn 22 cảnh báo, chủ yếu là "có phiên bản thư viện mới hơn" vì phiên bản được ghim có chủ đích, xem mục 9).
+**Build:** `assembleDebug` thành công; Android Lint 0 lỗi (còn 26 cảnh báo, chủ yếu là "có phiên bản thư viện mới hơn" vì phiên bản được ghim có chủ đích, xem mục 10, và gợi ý dùng hàm KTX).
 
 **Chạy thử trên emulator Android TV 9 (API 28, x86, 1080p)**, điều khiển bằng phím D-pad giả lập. "USB" là một volume rời giả lập bằng `sm set-virtual-disk` (FAT, gắn tại `/storage/XXXX-XXXX`, có broadcast mount/unmount như USB thật). Các kịch bản đã chạy:
 - Tạo PIN (PIN yếu bị từ chối), mở khóa Khu vực bố mẹ.
@@ -248,22 +255,22 @@ Cách các lựa chọn phát tiếp hoạt động khi hết video:
 - Đổi `config.json` (giới hạn 1 phút) rồi cắm lại USB: config mới được áp dụng. Hết giờ giữa video: dừng và hiện màn nghỉ. **Force-stop rồi mở lại: vẫn hết giờ.** Nhập sai PIN 5 lần thì khóa 30 giây có đếm ngược; sau đó nhập đúng PIN và thêm 15 phút thì xem tiếp được.
 - `config.json` lỗi (audience sai, `../../`, id trùng): giữ bản cũ, hiện chip cảnh báo, Khu vực bố mẹ liệt kê từng lỗi.
 - TV sleep/wake khi đang phát: trình phát được giải phóng, khi thức dậy hiện lại ở trạng thái tạm dừng kèm thanh điều khiển.
-- Yêu thích (giữ OK), trang Danh mục.
+- Yêu thích (giữ OK), trang Danh mục, kệ "Video tiếp theo", đếm ngược "Tiếp theo".
 - Logcat: không có crash hay ANR nào của `com.familytv.app`.
 
-Các lỗi phát hiện qua emulator và **đã sửa**: focus rơi vào menu khi nội dung đổi; vào menu không focus mục đang chọn; thanh điều khiển không hiện sau khi TV thức dậy; nhập PIN bằng phím số mà focus không tự chuyển sang OK; thanh "đã xem" khó thấy trên ảnh cùng màu.
+Các lỗi phát hiện qua emulator và **đã sửa**: focus rơi vào menu khi nội dung đổi; vào menu không focus mục đang chọn; thanh điều khiển không hiện sau khi TV thức dậy; nhập PIN bằng phím số mà focus không tự chuyển sang OK; thanh "đã xem" khó thấy trên ảnh cùng màu; thẻ trong kệ gợi ý bị cắt viền.
 
-**Trên TV Sony thật** (cài qua adb Wi-Fi, ngày 27/10/2026):
-- TV báo `Sony BRAVIA VU1`, **Android 11 (API 30)**, chip ARM 32-bit, 1920×1080. TV **không có trình chọn thư mục** (không activity nào xử lý `OPEN_DOCUMENT_TREE`), nên dùng luồng "Đọc USB trực tiếp" sau khi cấp quyền bằng `adb shell appops set --uid com.familytv.app MANAGE_EXTERNAL_STORAGE allow`.
-- App cài và mở được, không crash. Lần đầu mở mất khoảng 10 giây (bản debug).
-- Người dùng báo **chỉ nghe tiếng, không có hình**. Nguyên nhân: 2 video trên USB mã hóa **AV1 1080p**, còn TV chỉ có bộ giải mã H.264/H.265/VP8/VP9/MPEG-2/4. App đã được sửa để **báo lỗi rõ ràng** thay vì phát mỗi tiếng (đã kiểm chứng với chính file AV1 đó trên emulator). Bản chuyển sang H.264 sẽ phát được bằng bộ giải mã phần cứng của TV.
+**Trên một TV Sony BRAVIA thật** (Android 11, cài qua adb Wi-Fi, 10/2026):
+- TV báo `BRAVIA VU1`, **Android 11 (API 30)**, chip ARM 32-bit, giao diện 1920×1080. TV **không có trình chọn thư mục** (không activity nào xử lý `OPEN_DOCUMENT_TREE`), nên dùng luồng "Đọc USB trực tiếp" sau khi cấp quyền bằng lệnh `appops` ở mục 3.
+- App cài và mở được bằng remote từ màn hình chính, không crash. Lần đầu mở mất khoảng 5–10 giây (bản debug).
+- Video **AV1** chỉ phát tiếng, không có hình (TV không có bộ giải mã AV1). App đã được sửa để **báo lỗi rõ ràng** (kiểm chứng với chính file AV1 đó trên emulator). Sau khi chuyển sang H.264 bằng `tools/convert_for_tv.ps1`, TV dùng bộ giải mã phần cứng (theo log), ảnh đại diện được tạo và app ghi nhận tiến độ xem.
 
 ### Chưa kiểm thử
 
-- Trên TV Sony thật mới chỉ thử cài, mở app và phát 2 video AV1 (do người dùng thao tác). Các mục khác trong checklist (mục 9), như remote Sony, rút/cắm USB thật, sleep/resume, chưa được chạy trên TV.
+- Trên TV thật mới thử cài, mở app, đọc USB và phát video. Các mục khác trong checklist (mục 9), như rút/cắm USB thật, sleep/resume, phím media, chưa được chạy có hệ thống trên TV.
 - Trình chọn thư mục SAF (luồng chính) **chưa được chạy thử**, vì cả emulator lẫn TV Sony đều không có trình chọn. Mã đã được viết theo tài liệu và build được.
-- Android 10 (dùng `requestLegacyExternalStorage` cho luồng đọc trực tiếp) chưa chạy trên thiết bị nào.
-- Thư viện lớn (hàng nghìn video), USB NTFS, phím media trên remote thật, bàn phím tiếng Việt có dấu trên TV.
+- Android 10 (dùng `requestLegacyExternalStorage` cho luồng đọc trực tiếp) chưa chạy trên thiết bị nào. Các hãng TV khác chưa được thử.
+- Thư viện lớn (hàng nghìn video), USB NTFS, bàn phím tiếng Việt có dấu trên TV.
 - Không có test giao diện tự động (instrumented/UI test). Việc kiểm tra UI ở trên là chạy tay trên emulator.
 
 ### Hạn chế còn lại
@@ -272,14 +279,14 @@ Các lỗi phát hiện qua emulator và **đã sửa**: focus rơi vào menu kh
 - Hạn mức ngày dựa trên đồng hồ TV (xem mục 6).
 - App không khóa được toàn bộ TV (xem mục 5).
 - Khả năng phát video phụ thuộc codec của TV.
-- Chưa có tìm kiếm bằng giọng nói (đúng phạm vi phiên bản đầu).
+- Chưa có tìm kiếm bằng giọng nói.
 - Giao diện chỉ có tiếng Việt; chuỗi giao diện nằm trực tiếp trong mã Kotlin, chưa tách ra `strings.xml`.
 
 ## 9. Checklist kiểm thử trên TV thật
 
-Đánh dấu khi đã thử trên Sony KD-49X7500H:
+Đánh dấu khi đã thử trên TV của bạn (rất mong bạn chia sẻ kết quả qua Issues, kèm hãng, đời TV và phiên bản Android):
 
-- [ ] Ghi lại phiên bản Android của TV (Cài đặt → Giới thiệu).
+- [ ] Ghi lại hãng, đời TV và phiên bản Android (Cài đặt → Giới thiệu).
 - [ ] Cài APK, biểu tượng/banner Family TV hiện trong launcher, mở được bằng remote.
 - [ ] Tạo PIN; PIN yếu bị từ chối.
 - [ ] **Quyền USB:** thử "Chọn thư mục FamilyTV". Ghi lại TV có trình chọn hay không, trình chọn có hiện USB hay không. Nếu không có, thử "Đọc USB trực tiếp".
@@ -290,7 +297,7 @@ Các lỗi phát hiện qua emulator và **đã sửa**: focus rơi vào menu kh
 - [ ] **Rút USB khi đang phát:** dừng, báo "USB đã ngắt kết nối", không crash. **Cắm lại:** thư viện tự phục hồi.
 - [ ] Cắm một USB khác có cùng cấu trúc thư mục: tiến độ xem không bị ghép nhầm.
 - [ ] **Sleep/resume:** tắt TV bằng remote khi đang phát, bật lại: video tạm dừng, đang ở chế độ Trẻ em.
-- [ ] **Video lỗi/codec:** thử MP4 H.264, MKV, HEVC (H.265), AVI, một file hỏng; ghi lại file nào phát được.
+- [ ] **Video lỗi/codec:** thử MP4 H.264, MKV, HEVC (H.265), VP9, AV1, AVI, một file hỏng; ghi lại file nào phát được.
 - [ ] **Đổi chế độ:** Người lớn/Tất cả cần PIN; bấm Home rồi mở lại thì về Trẻ em; nội dung adults không xuất hiện ở Trẻ em (Trang chủ, tìm kiếm, yêu thích, xem tiếp).
 - [ ] **Hết giờ:** đặt giới hạn ngắn, xem đến hết giờ: màn nghỉ hiện; tắt app rồi mở lại vẫn hết giờ; thêm giờ bằng PIN.
 - [ ] Nhập sai PIN 5 lần thì bị khóa tạm thời.
@@ -312,7 +319,17 @@ gradlew.bat :app:testDebugUnitTest      # unit test
 gradlew.bat :app:lintDebug              # lint
 ```
 
-APK: `app/build/outputs/apk/debug/app-debug.apk`. File `local.properties` trỏ tới Android SDK của máy hiện tại; Android Studio sẽ tự tạo lại file này trên máy khác.
+APK: `app/build/outputs/apk/debug/app-debug.apk`. File `local.properties` (trỏ tới Android SDK) không có trong repo; Android Studio tự tạo khi mở dự án.
+
+APK debug được ký bằng khóa debug của máy build. Muốn cài đè bản mới mà giữ dữ liệu (PIN, tiến độ, yêu thích), các bản phải được build trên cùng một máy (cùng khóa); khác khóa thì phải gỡ bản cũ trước.
+
+**Biểu tượng, logo và banner riêng cho bản của bạn (không đưa lên git):** đặt file vào `app/src/home/res/` với đúng tên và thư mục như trong `app/src/main/res/`, ví dụ `drawable/ic_launcher_foreground.xml`, `drawable/ic_launcher.xml`, `drawable/ic_logo.xml` (logo trong app) và `drawable-xhdpi/tv_banner.png` (banner 640×360). Khi thư mục này tồn tại, các bản build trên máy bạn dùng tài nguyên trong đó thay cho bản mặc định. Thư mục đã nằm trong `.gitignore`. Muốn build bản mặc định (ví dụ để chia sẻ), thêm `-PnoHome`:
+
+```
+gradlew.bat -PnoHome :app:clean :app:assembleDebug
+```
+
+Nên kèm `clean` khi chuyển qua lại giữa hai kiểu build; nếu không, Gradle có thể báo lỗi build tăng dần ở bước `mergeDebugResources`.
 
 **Phiên bản** (khai báo trong `gradle/libs.versions.toml`, đã kiểm tra `aar-metadata` trên Google Maven/Maven Central ngày 27/10/2026): AGP 8.13.2, Gradle 8.14.3, Kotlin 2.2.21, KSP 2.2.21-2.0.5, Compose BOM 2026.06.01 (Compose 1.11.4), tv-material 1.1.0, Media3 1.11.1, Room 2.8.5, DataStore 1.2.1, activity-compose 1.13.0, core-ktx 1.18.0, lifecycle 2.10.0, kotlinx-serialization-json 1.9.0, coroutines 1.10.2; `compileSdk`/`targetSdk` 36, `minSdk` 23.
 Các bản mới hơn (Compose BOM 2026.09, lifecycle 2.11, core 1.19) đòi compileSdk 37 và AGP 9.1, nên chưa nâng.
@@ -327,3 +344,11 @@ Các bản mới hơn (Compose BOM 2026.09, lifecycle 2.11, core 1.19) đòi com
 | `data/db`, `data/settings` | Room (chỉ mục, tiến độ, yêu thích), DataStore |
 | `ui/` | Compose for TV: menu, Trang chủ, Tìm kiếm, Danh mục, Yêu thích, Xem tiếp, Khu vực bố mẹ, hộp thoại PIN, màn nghỉ |
 | `player/` | `PlayerActivity` + `PlayerViewModel` (Media3 ExoPlayer, hàng đợi, đếm giờ, xử lý mất USB) |
+
+Các file khác: `tools/convert_for_tv.ps1` (chuyển video cho TV, mục 1.6), `tools/make_demo_library.sh` (tạo thư viện thử nghiệm), `sample/FamilyTV/config.json` (config mẫu), `prompt.md` (bản đặc tả yêu cầu ban đầu của dự án).
+
+## 11. Đóng góp và giấy phép
+
+Rất hoan nghênh báo lỗi, kết quả thử trên các đời TV khác (mục 9) và pull request qua GitHub Issues/PR.
+
+Mã nguồn phát hành theo giấy phép [MIT](LICENSE). "Family TV", logo ngôi nhà và banner trong repo là tài nguyên riêng của dự án; dự án không liên quan và không được bảo trợ bởi YouTube, Google, Sony hay bất kỳ hãng TV nào.
